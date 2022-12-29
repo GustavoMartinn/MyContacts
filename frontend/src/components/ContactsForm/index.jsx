@@ -2,6 +2,7 @@ import { useState } from 'react';
 import propTypes from 'prop-types';
 
 import isEmailValid from '../../utils/isEmailValid';
+import useErrors from '../../hooks/useErrors';
 
 import FormGroup from '../FormGroup';
 import Input from '../Input';
@@ -15,49 +16,29 @@ export default function ContactsForm({ buttonLabel }) {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [socialNetwork, setSocialNetwork] = useState('');
-  const [erros, setErros] = useState([]);
+  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
 
   function handleNameChange(event) {
     setName(event.target.value);
 
     if (!event.target.value) {
-      setErros((prevState) => [
-        ...prevState,
-        { field: 'name', message: 'O campo nome é obrigatório' },
-      ]);
+      setError({ field: 'name', message: 'Nome é obrigatório' });
       return;
     }
 
-    setErros((prevState) =>
-      prevState.filter((error) => error.field !== 'name')
-    );
+    removeError('name');
   }
 
   function handleEmailChange(event) {
     setEmail(event.target.value);
 
     if (event.target.value && !isEmailValid(event.target.value)) {
-      const errorAlreadyExists = erros.some((error) => error.field === 'email');
-
-      if (errorAlreadyExists) return;
-
-      setErros((prevState) => [
-        ...prevState,
-        { field: 'email', message: 'E-mail inválido' },
-      ]);
+      setError({ field: 'email', message: 'E-mail inválido' });
       return;
     }
 
-    setErros((prevState) =>
-      prevState.filter((error) => error.field !== 'email')
-    );
+    removeError('email');
   }
-
-  function getErrorMessageByFieldName(fieldName) {
-    return erros.find((error) => error.field === fieldName)?.message;
-  }
-
-  console.log(erros);
 
   function handleSubmit(event) {
     event.preventDefault();
