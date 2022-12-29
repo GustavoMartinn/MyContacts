@@ -6,7 +6,7 @@ export const InputSearchContainer = styled.div`
   width: 100%;
 
   input {
-    width: 100%;
+    width: calc(100% - 32px);
     background: #FFF;
     border: none;
     border-radius: 25px;
