@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export default styled.input`
-  width: 100%;
+  width: calc(100% - 36px);
   border: none;
   background: #fff;
   border: 2px solid #fff;
@@ -12,6 +12,7 @@ export default styled.input`
   padding: 0 16px;
   font-size: 16px;
   transition: border-color 0.2s ease-in;
+  appearance: none;
 
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary.main};
