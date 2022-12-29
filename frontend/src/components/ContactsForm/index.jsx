@@ -1,32 +1,85 @@
+import { useState } from 'react';
 import propTypes from 'prop-types';
+
+import isEmailValid from '../../utils/isEmailValid';
 
 import FormGroup from '../FormGroup';
 import Input from '../Input';
 import Select from '../Select';
 import Button from '../Button';
+
 import { ButtonContainer, Form } from './styles';
-import { useState } from 'react';
 
 export default function ContactsForm({ buttonLabel }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [socialNetwork, setSocialNetwork] = useState('');
+  const [erros, setErros] = useState([]);
+
+  function handleNameChange(event) {
+    setName(event.target.value);
+
+    if (!event.target.value) {
+      setErros((prevState) => [
+        ...prevState,
+        { field: 'name', message: 'O campo nome é obrigatório' },
+      ]);
+      return;
+    }
+
+    setErros((prevState) =>
+      prevState.filter((error) => error.field !== 'name')
+    );
+  }
+
+  function handleEmailChange(event) {
+    setEmail(event.target.value);
+
+    if (event.target.value && !isEmailValid(event.target.value)) {
+      const errorAlreadyExists = erros.some((error) => error.field === 'email');
+
+      if (errorAlreadyExists) return;
+
+      setErros((prevState) => [
+        ...prevState,
+        { field: 'email', message: 'E-mail inválido' },
+      ]);
+      return;
+    }
+
+    setErros((prevState) =>
+      prevState.filter((error) => error.field !== 'email')
+    );
+  }
+
+  console.log(erros);
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    console.log({
+      name,
+      email,
+      phone,
+      socialNetwork,
+    });
+  }
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Input
           placeholder='Nome'
           value={name}
-          onChange={(event) => setName(event.target.value)}
+          onChange={handleNameChange}
         />
       </FormGroup>
       <FormGroup>
         <Input
           placeholder='E-mail'
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={handleEmailChange}
         />
       </FormGroup>
       <FormGroup>
