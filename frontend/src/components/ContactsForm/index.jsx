@@ -9,8 +9,8 @@ import { ButtonContainer, Form } from './styles';
 export default function ContactsForm({ buttonLabel }) {
   return (
     <Form>
-      <FormGroup>
-        <Input placeholder='Nome' />
+      <FormGroup error="O formato é invalido">
+        <Input placeholder='Nome' error />
       </FormGroup>
       <FormGroup>
         <Input placeholder='E-mail' />
